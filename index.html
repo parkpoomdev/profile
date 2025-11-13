@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Portfolio | Parkpoom Wisedsri</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind for Inter font and theme setup -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        // Light Mode Colors
+                        'primary-text': 'rgb(24, 24, 27)',     // Main text (zinc-900)
+                        'secondary-text': 'rgb(107, 114, 128)', // Secondary/detail text (gray-500)
+                        'primary-bg': 'rgb(255, 255, 255)',    // Background (white)
+                        
+                        // Dark Mode Colors (Tech Aesthetic)
+                        'dark-text': 'rgb(248, 250, 252)',      // Main text (slate-50 - bright)
+                        'dark-bg': 'rgb(15, 23, 42)',          // Background (slate-900 - professional navy)
+                        
+                        // New Accent Color (Vibrant Electric Blue)
+                        'tech-accent': 'rgb(0, 150, 255)', 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Set base colors for light mode */
+        :root {
+            color: theme('colors.primary-text');
+            background-color: theme('colors.primary-bg');
+        }
+
+        /* Overrides for dark mode */
+        .dark {
+            color: theme('colors.dark-text');
+            background-color: theme('colors.dark-bg');
+        }
+
+        /* Custom scrollbar for aesthetic feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: theme('colors.gray.400');
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background-color: theme('colors.slate.600');
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .fade-in.active {
+            opacity: 1;
+        }
+
+        /* Minimalist Button Styling */
+        .minimal-btn {
+            @apply p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-300;
+        }
+        
+        /* Styling for the active navigation link to use the accent color */
+        .active-nav-link {
+            color: theme('colors.tech-accent') !important;
+            border-bottom: 2px solid theme('colors.tech-accent');
+            padding-bottom: 2px;
+        }
+        
+        /* Override the theme toggle hover to match the dark-bg */
+        .dark .minimal-btn:hover {
+            background-color: rgb(30, 41, 59); /* slate-800 equivalent */
+        }
+
+        /* Styling for disabled nav links */
+        .nav-link.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            cursor: default;
+        }
+
+    </style>
+</head>
+
+<body class="antialiased min-h-full flex flex-col pt-10 px-4 md:px-6">
+
+    <div class="max-w-4xl w-full mx-auto">
+
+        <!-- Header and Navigation -->
+        <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-12 border-b border-gray-200 dark:border-slate-800">
+            
+            <!-- Logo/Name -->
+            <a href="#" class="text-3xl font-bold tracking-tight mb-4 sm:mb-0 hover:text-tech-accent dark:hover:text-tech-accent transition duration-300">
+                Parkpoom Wisedsri
+            </a>
+
+            <!-- Navigation and Theme Toggle -->
+            <nav id="main-nav" class="flex items-center space-x-6 text-base font-medium">
+                <div class="flex space-x-6">
+                    <button data-section="about" class="nav-link hover:text-tech-accent dark:hover:text-tech-accent transition duration-200">About me</button>
+                    <button data-section="work" class="nav-link hover:text-tech-accent dark:hover:text-tech-accent transition duration-200">Work</button>
+                    <button data-section="blogs" class="nav-link hover:text-tech-accent dark:hover:text-tech-accent transition duration-200">Publications</button>
+                    <!-- New "Blogs" tab added -->
+                    <button data-section="new-blogs" class="nav-link hover:text-tech-accent dark:hover:text-tech-accent transition duration-200">Blogs</button>
+                </div>
+                
+                <!-- Dark Mode Toggle Button (Sun/Moon SVG) -->
+                <button id="themeToggle" aria-label="Toggle dark mode" class="minimal-btn ml-4">
+                    <!-- Icon placeholder, will be replaced by JS -->
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content Sections Container -->
+        <main class="py-16">
+
+            <!-- 1. ABOUT ME SECTION (with Timeline) -->
+            <section id="about" class="content-section fade-in active">
+                <h2 class="text-5xl font-extrabold mb-10 tracking-tighter">Hello, I'm Parkpoom Wisedsri.</h2>
+                <div class="text-lg space-y-6 max-w-2xl text-secondary-text dark:text-zinc-300">
+                    <p>
+                        I'm a Doctoral Student focused on creating clean, functional, and aesthetically pleasing digital experiences. My work is driven by a strong belief in the power of simplicity and utility, exploring the intersection of creative coding and intuitive user interfaces.
+                    </p>
+                    <p>
+                        Currently based in Pathum Thani, Thailand, I specialize in <span class="text-tech-accent font-semibold">Data Analytic and Visualization for Telehealth Applications</span>.
+                    </p>
+                     <p>
+                        My technical skills include web application development with Python, NodeJS, and JavaScript, database management with SQL, and mobile development with Java Android.
+                    </p>
+                </div>
+
+                <!-- Vertical CV Timeline (REFACTORED with CV Data) -->
+                <div class="mt-12">
+                    <h3 class="text-3xl font-bold mb-10 tracking-tight">Professional Timeline</h3>
+                    
+                    <ol class="relative border-s border-gray-300 dark:border-gray-700">                  
+                        
+                        <!-- Timeline Item 1 -->
+                        <li class="mb-10 ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200" data-timeline-id="ra-ait">
+                            <div class="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-tech-accent">May 2023 - Present</p>
+                            <h4 class="text-xl font-semibold text-primary-text dark:text-dark-text mt-1">Research Assistant (ICT / AI / Data Science)</h4>
+                            <p class="text-base font-normal text-secondary-text dark:text-zinc-400">Asian Institute of Technology | Thailand</p>
+                            <p class="text-sm mt-2 font-normal text-secondary-text dark:text-zinc-400">Working on Telehealth Monitoring and Assistive Systems for Elderly and Disabled People.</p>
+                        </li>
+
+                        <!-- Timeline Item 2 -->
+                        <li class="mb-10 ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200" data-timeline-id="ta-chula">
+                            <div class="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-tech-accent">February 2023</p>
+                            <h4 class="text-xl font-semibold text-primary-text dark:text-dark-text mt-1">Teacher Assistant (BAScii)</h4>
+                            <p class="text-base font-normal text-secondary-text dark:text-zinc-400">Chulalongkorn University | Thailand</p>
+                        </li>
+
+                        <!-- Timeline Item 3 -->
+                        <li class="mb-10 ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200" data-timeline-id="pa-brunel">
+                            <div class="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-tech-accent">Aug 2022 - Oct 2022</p>
+                            <h4 class="text-xl font-semibold text-primary-text dark:text-dark-text mt-1">Project Assistant (Web Developer OT Replacement)</h4>
+                            <p class="text-base font-normal text-secondary-text dark:text-zinc-400">Brunel University London | United Kingdom</p>
+                        </li>
+
+                        <!-- Timeline Item 4 -->
+                        <li class="mb-10 ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200" data-timeline-id="gta-brunel">
+                            <div class="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-tech-accent">Sep 2022 - Nov 2022</p>
+                            <h4 class="text-xl font-semibold text-primary-text dark:text-dark-text mt-1">Graduate Teaching Assistant (GTA)</h4>
+                            <p class="text-base font-normal text-secondary-text dark:text-zinc-400">Brunel University London | United Kingdom</p>
+                        </li>
+
+                        <!-- Timeline Item 5 -->
+                        <li class="mb-10 ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200" data-timeline-id="reslife-brunel">
+                            <div class="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-tech-accent">Sep 2022 - Nov 2022</p>
+                            <h4 class="text-xl font-semibold text-primary-text dark:text-dark-text mt-1">ResLife Ambassador</h4>
+                            <p class="text-base font-normal text-secondary-text dark:text-zinc-400">Brunel University London | United Kingdom</p>
+                        </li>
+
+                        <!-- Timeline Item 6 -->
+                        <li class="ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200" data-timeline-id="lab-suranaree"> <!-- No mb-10 on the last item -->
+                            <div class="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>
+                            <p class="mb-1 text-sm font-normal leading-none text-tech-accent">Aug 2014 - Present</p>
+                            <h4 class="text-xl font-semibold text-primary-text dark:text-dark-text mt-1">Laboratory Instructor (Study Leave)</h4>
+                            <p class="text-base font-normal text-secondary-text dark:text-zinc-400">Suranaree University of Technology | Thailand</p>
+                        </li>
+
+                    </ol>
+                </div>
+            </section>
+
+            <!-- 2. WORK SECTION (Updated with CV Projects) -->
+            <section id="work" class="content-section fade-in hidden">
+                <h2 class="text-5xl font-extrabold mb-12 tracking-tighter">Selected Projects.</h2>
+                <div class="space-y-16">
+                    
+                    <!-- Project 1 -->
+                    <article class="flex flex-col sm:flex-row gap-8">
+                        <div class="w-full sm:w-1/3">
+                            <p class="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500">2023</p>
+                            <h3 class="text-2xl font-semibold mt-1">Telehealth Monitoring System</h3>
+                        </div>
+                        <div class="w-full sm:w-2/3 text-lg space-y-4 text-secondary-text dark:text-zinc-300">
+                            <p>A system utilizing AI and Data Science to deliver healthcare services to elderly and disabled patients remotely, enhancing accuracy in physical health monitoring.</p>
+                            <a href="#" class="block text-sm font-medium underline text-tech-accent hover:no-underline">View Project Details &rarr;</a>
+                        </div>
+                    </article>
+
+                    <!-- Project 2 -->
+                    <article class="flex flex-col sm:flex-row gap-8">
+                        <div class="w-full sm:w-1/3">
+                            <p class="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500">2020</p>
+                            <h3 class="text-2xl font-semibold mt-1">Mobile Workout Planner</h3>
+                        </div>
+                        <div class="w-full sm:w-2/3 text-lg space-y-4 text-secondary-text dark:text-zinc-300">
+                            <p>A mobile application (dissertation project) for workout planning based on current weather and air quality conditions.</p>
+                            <a href="#" class="block text-sm font-medium underline text-tech-accent hover:no-underline">View Project Details &rarr;</a>
+                        </div>
+                    </article>
+
+                    <!-- Project 3 -->
+                    <article class="flex flex-col sm:flex-row gap-8">
+                        <div class="w-full sm:w-1/3">
+                            <p class="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500">2014</p>
+                            <h3 class="text-2xl font-semibold mt-1">Animated UI with WebGL</h3>
+                        </div>
+                        <div class="w-full sm:w-2/3 text-lg space-y-4 text-secondary-text dark:text-zinc-300">
+                            <p>Cooperative education project at NECTEC focused on developing a 2D animated user interface using WebGL technology.</p>
+                            <a href="#" class="block text-sm font-medium underline text-tech-accent hover:no-underline">View Project Details &rarr;</a>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- 3. PUBLICATIONS LISTING SECTION (Was Blogs) -->
+            <section id="blogs" class="content-section fade-in hidden">
+                <h2 class="text-5xl font-extrabold mb-12 tracking-tighter">Publications.</h2>
+                <div class="space-y-8">
+                    
+                    <!-- Publication 1 - Clickable link -->
+                    <button data-post-id="iceltics2024" class="post-link text-left w-full block p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition duration-300 -mx-4">
+                        <p class="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-1">2024 (ICELTICs)</p>
+                        <h3 class="text-xl font-semibold">Data analytics and visualization in bimanual rehabilitation monitoring systems...</h3>
+                        <p class="text-secondary-text dark:text-zinc-300">A user-centered design approach to healthcare professionals decision support.</p>
+                    </button>
+
+                    <!-- Publication 2 - Clickable link -->
+                    <button data-post-id="tencon2023" class="post-link text-left w-full block p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition duration-300 -mx-4">
+                        <p class="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-1">2023 (TENCON)</p>
+                        <h3 class="text-xl font-semibold">Data Analytics and Visualisation System for Fall Detection for Elderly and Disabled People.</h3>
+                        <p class="text-secondary-text dark:text-zinc-300">Published in TENCON 2023 - 2023 IEEE Region 10 Conference.</p>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 4. BLOG DETAIL PAGE (Handles Publication Details) -->
+            <section id="blog-detail" class="content-section fade-in hidden">
+                <!-- Back Button -->
+                <button id="backToBlogs" class="text-tech-accent mb-8 flex items-center hover:underline transition duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to all Publications
+                </button>
+
+                <div id="blog-content-area" class="max-w-3xl mx-auto">
+                    <!-- Dynamic content will be injected here -->
+                </div>
+            </section>
+
+            <!-- 5. NEW BLOGS LISTING SECTION (Added) -->
+            <section id="new-blogs" class="content-section fade-in hidden">
+                <h2 class="text-5xl font-extrabold mb-12 tracking-tighter">Code & Thoughts.</h2>
+                <div class="space-y-8">
+                    <!-- Blog Post 1 - Clickable link -->
+                    <button data-post-id="runnable_scripts" class="new-post-link text-left w-full block p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 transition duration-300 -mx-4">
+                        <p class="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-1">Nov 10, 2025</p>
+                        <h3 class="text-xl font-semibold">Embedding Runnable Code Snippets in a Portfolio.</h3>
+                        <p class="text-secondary-text dark:text-zinc-300">A look at how to use simple JavaScript to create interactive, live examples on a static page.</p>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 6. NEW BLOG DETAIL PAGE (Added for Code Snippets) -->
+            <section id="new-blog-detail" class="content-section fade-in hidden">
+                <!-- Back Button -->
+                <button id="backToNewBlogs" class="text-tech-accent mb-8 flex items-center hover:underline transition duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Back to all Blogs
+                </button>
+
+                <div id="new-blog-content-area" class="max-w-3xl mx-auto">
+                    <!-- Dynamic content will be injected here -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-16 pt-10 border-t border-gray-200 dark:border-slate-800 text-center text-sm text-secondary-text dark:text-zinc-500">
+            <p>&copy; <span id="currentYear"></span> Parkpoom Wisedsri. Crafted with Simplicity.</p>
+        </footer>
+
+    </div>
+
+    <!-- JavaScript for Navigation, Dark Mode, and Blog Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.content-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const postLinks = document.querySelectorAll('.post-link');
+            const themeToggle = document.getElementById('themeToggle');
+            const currentYearElement = document.getElementById('currentYear');
+            const blogContentArea = document.getElementById('blog-content-area');
+            const backToBlogsButton = document.getElementById('backToBlogs');
+            
+            // New selectors for the new "Blogs" section
+            const newPostLinks = document.querySelectorAll('.new-post-link');
+            const newBlogContentArea = document.getElementById('new-blog-content-area');
+            const backToNewBlogsButton = document.getElementById('backToNewBlogs');
+
+            currentYearElement.textContent = new Date().getFullYear();
+            let isNavLocked = false; // Flag for navigation lock
+
+            // --- Theme Toggle Logic ---
+            const lightIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-sun"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+            const darkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+            const isDarkMode = () => localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+            const setTheme = (isDark) => {
+                if (isDark) {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                    themeToggle.innerHTML = darkIcon;
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                    themeToggle.innerHTML = lightIcon;
+                }
+            };
+
+            setTheme(isDarkMode());
+            themeToggle.addEventListener('click', () => setTheme(!isDarkMode()));
+
+            // --- Navigation Lock Function ---
+            const toggleNavLock = (lock) => {
+                isNavLocked = lock;
+                navLinks.forEach(link => {
+                    if (lock) {
+                        link.classList.add('disabled');
+                    } else {
+                        link.classList.remove('disabled');
+                    }
+                });
+            };
+
+
+            // --- Navigation Logic ---
+            const setActiveSection = (targetId) => {
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    section.classList.add('hidden');
+                });
+
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    setTimeout(() => targetSection.classList.add('active'), 50);
+                }
+
+                // Check for blog detail and lock the main nav
+                if (targetId === 'blog-detail' || targetId === 'new-blog-detail') {
+                    toggleNavLock(true);
+                } else {
+                    toggleNavLock(false);
+                }
+
+                // Update nav link styling only for main menu items
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav-link', 'text-tech-accent');
+                    link.classList.add('text-secondary-text', 'dark:text-zinc-300');
+                    
+                    // Only apply active state if it's one of the three main nav buttons
+                    if (link.dataset.section === targetId) {
+                        link.classList.add('active-nav-link', 'text-tech-accent');
+                        link.classList.remove('text-secondary-text', 'dark:text-zinc-300');
+                    }
+                });
+            };
+
+            // --- Publication Detail Data ---
+            const publicationData = {
+                iceltics2024: {
+                    title: "Data analytics and visualization in bimanual rehabilitation monitoring systems: A user-centered design approach to healthcare professionals decision support.",
+                    date: "2024 - ICELTICs",
+                    content: `
+                        <p class="mb-6"><strong>Full Citation:</strong> Wisedsri, P., Anutariya, C., Sujarae, A., Vachalathiti, R., & Bovonsunthonchai, S. (2024). Data analytics and visualization in bimanual rehabilitation monitoring systems: A user-centered design approach to healthcare professionals decision support. <em>Proceedings of the 2024 International Conference on Electrical Engineering and Informatics (ICELTICs).</em></p>
+                        
+                        <a href="https://doi.org/10.1109/ICELTICs62730.2024.10776145" target="_blank" rel="noopener noreferrer"
+                           class="inline-block text-lg font-semibold text-tech-accent hover:underline">
+                           View Publication (DOI) &rarr;
+                        </a>
+                    `,
+                },
+                tencon2023: {
+                    title: "Data Analytics and Visualisation System for Fall Detection for Elderly and Disabled People.",
+                    date: "2023 - TENCON",
+                    content: `
+                        <p class="mb-6"><strong>Full Citation:</strong> P. Wisedsri and C. Anutariya, "Data Analytics and Visualisation System for Fall Detection for Elderly and Disabled People," <em>TENCON 2023 - 2023 IEEE Region 10 Conference (TENCON)</em>, Chiang Mai, Thailand, 2023, pp. 1315-1320.</p>
+                        
+                        <a href="https://doi.org/10.1109/TENCON58879.2023.10322370" target="_blank" rel="noopener noreferrer"
+                           class="inline-block text-lg font-semibold text-tech-accent hover:underline">
+                           View Publication (DOI) &rarr;
+                        </a>
+                    `,
+                }
+            };
+
+            // --- New Blog Data & Converter Logic (Added) ---
+            const newBlogData = {
+                runnable_scripts: {
+                    title: "Embedding Runnable Code Snippets in a Portfolio.",
+                    date: "Nov 10, 2025",
+                    content: `
+                        <p class="mb-6">One of the best ways to showcase technical skill is to demonstrate it live. Instead of just showing code, why not make it runnable? This portfolio uses simple, isolated JavaScript functions to power interactive components right inside a "blog post."</p>
+                        <p class="mb-8">This approach is lightweight, doesn't require a complex backend, and provides immediate value to the user. Below is the live currency converter example that was featured in a previous version of this site.</p>
+                        
+                        <h3 class="text-3xl font-semibold mb-6 pt-4 border-t border-gray-100 dark:border-slate-800">Live Code Snippet: Currency Converter</h3>
+                        <div id="converter-app" class="p-6 rounded-xl shadow-lg bg-gray-50 dark:bg-slate-800/70 border border-gray-200 dark:border-slate-700">
+                            <!-- Converter HTML will be injected here -->
+                        </div>
+                        
+                        <h3 class="text-2xl font-semibold mt-10 mb-4">Conclusion</h3>
+                        <p class="text-secondary-text dark:text-zinc-300">This method proves that a "static" portfolio can still be a dynamic and engaging experience.</p>
+                    `,
+                }
+            };
+
+            const renderCurrencyConverter = () => {
+                const converterHtml = `
+                    <div class="space-y-4">
+                        <h4 class="text-xl font-bold text-tech-accent mb-4">USD to EUR Converter</h4>
+                        <input type="number" id="usd-input" placeholder="Enter USD amount" value="100"
+                            class="w-full p-3 rounded-md border border-gray-300 dark:border-slate-600 dark:bg-slate-900 text-primary-text dark:text-dark-text focus:ring-tech-accent focus:border-tech-accent transition"
+                        >
+                        <div class="flex justify-between items-center text-secondary-text dark:text-zinc-400">
+                            <span class="text-lg">Result:</span>
+                            <span id="eur-output" class="text-2xl font-extrabold text-primary-text dark:text-dark-text"></span>
+                        </div>
+                        <p class="text-xs text-secondary-text dark:text-zinc-500">Exchange Rate (USD to EUR): 0.92</p>
+                    </div>
+                `;
+                
+                const converterApp = document.getElementById('converter-app');
+                if (converterApp) {
+                    converterApp.innerHTML = converterHtml;
+                    const usdInput = document.getElementById('usd-input');
+                    const eurOutput = document.getElementById('eur-output');
+                    const rate = 0.92;
+
+                    const convert = () => {
+                        const usd = parseFloat(usdInput.value) || 0;
+                        const eur = (usd * rate).toFixed(2);
+                        eurOutput.textContent = '€' + eur;
+                    };
+
+                    usdInput.addEventListener('input', convert);
+                    convert(); // Initial conversion on load
+                }
+            };
+
+            const showNewBlogDetail = (postId) => {
+                const post = newBlogData[postId];
+                if (!post) {
+                    newBlogContentArea.innerHTML = `<p class="text-xl text-red-500">Post not found.</p>`;
+                    setActiveSection('new-blog-detail');
+                    return;
+                }
+
+                newBlogContentArea.innerHTML = `
+                    <p class="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">${post.date}</p>
+                    <h1 class="text-5xl font-extrabold mb-10 tracking-tighter">${post.title}</h1>
+                    <div class="text-lg space-y-4 text-secondary-text dark:text-zinc-300">
+                        ${post.content}
+                    </div>
+                `;
+
+                // Render the live converter if the post requires it
+                if (postId === 'runnable_scripts') {
+                    renderCurrencyConverter();
+                }
+
+                setActiveSection('new-blog-detail');
+            };
+            // --- End of Added Logic ---
+
+
+            const showBlogDetail = (postId) => {
+                const post = publicationData[postId];
+                if (!post) {
+                    blogContentArea.innerHTML = `<p class="text-xl text-red-500">Publication not found.</p>`;
+                    setActiveSection('blog-detail');
+                    return;
+                }
+
+                blogContentArea.innerHTML = `
+                    <p class="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">${post.date}</p>
+                    <h1 class="text-5xl font-extrabold mb-10 tracking-tighter">${post.title}</h1>
+                    <div class="text-lg space-y-4 text-secondary-text dark:text-zinc-300">
+                        ${post.content}
+                    </div>
+                `;
+
+                // Switch view and lock navigation
+                setActiveSection('blog-detail');
+            };
+
+            // Event listener for opening blog posts
+            postLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const postId = link.dataset.postId;
+                    showBlogDetail(postId);
+                    // Reset scroll to top
+                    window.scrollTo(0, 0); 
+                });
+            });
+
+            // New Event listener for opening new blog posts
+            newPostLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const postId = link.dataset.postId;
+                    showNewBlogDetail(postId);
+                    window.scrollTo(0, 0); 
+                });
+            });
+
+            // Event listener for back button (unlocks nav)
+            backToBlogsButton.addEventListener('click', () => {
+                setActiveSection('blogs');
+                window.scrollTo(0, 0);
+            });
+
+            // New Event listener for new back button
+            backToNewBlogsButton.addEventListener('click', () => {
+                setActiveSection('new-blogs');
+                window.scrollTo(0, 0);
+            });
+
+            // Event listener for main navigation links (checks lock state)
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    // Prevent navigation if locked (i.e., when viewing a blog detail)
+                    if (isNavLocked) return; 
+
+                    const targetSectionId = e.target.dataset.section;
+                    if (targetSectionId) {
+                        setActiveSection(targetSectionId);
+                    }
+                });
+            });
+
+            // Event listener for timeline items
+            const newTimelineItems = document.querySelectorAll('.timeline-content-wrapper li');
+            newTimelineItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    console.log('Timeline item clicked:', item.dataset.timelineId);
+                });
+            });
+
+
+            // Initial load state
+            setActiveSection('about');
+        });
+    </script>
+</body>
+</html>
