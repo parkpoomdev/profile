@@ -8,6 +8,37 @@ interface TimelineItem {
   description?: string
 }
 
+interface EducationItem {
+  id: string
+  period: string
+  degree: string
+  institution: string
+  yearOfCompletion?: string
+}
+
+const educationData: EducationItem[] = [
+  {
+    id: 'phd-ait',
+    period: '2023 - Present',
+    degree: 'Doctor of Engineering, Computer Science',
+    institution: 'Asian Institute of Technology | Thailand',
+  },
+  {
+    id: 'msc-sheffield',
+    period: 'Year of Completion: 2020',
+    degree: 'M.Sc.Eng., Computer Science',
+    institution: 'The University of Sheffield | United Kingdom',
+    yearOfCompletion: '2020',
+  },
+  {
+    id: 'beng-suranaree',
+    period: 'Year of Completion: 2014',
+    degree: 'BEng, Information Technology',
+    institution: 'Suranaree University of Technology | Thailand',
+    yearOfCompletion: '2014',
+  },
+]
+
 const timelineData: TimelineItem[] = [
   {
     id: 'ra-ait',
@@ -62,6 +93,26 @@ export default function AboutSection() {
         <p>
           My technical expertise encompasses web application development utilising Python, Node.js, and JavaScript, database management with SQL, and mobile application development with Java for Android platforms.
         </p>
+      </div>
+
+      <div className="mt-12">
+        <h3 className="text-3xl font-bold mb-10 tracking-tight">Education Profile</h3>
+        
+        <ol className="relative border-s border-gray-300 dark:border-gray-700">
+          {educationData.map((item, index) => (
+            <li
+              key={item.id}
+              className={`ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200 ${
+                index < educationData.length - 1 ? 'mb-10' : ''
+              }`}
+            >
+              <div className="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>
+              <p className="mb-1 text-sm font-normal leading-none text-tech-accent">{item.period}</p>
+              <h4 className="text-xl font-semibold text-primary-text dark:text-dark-text mt-1">{item.degree}</h4>
+              <p className="text-base font-normal text-secondary-text dark:text-zinc-400">{item.institution}</p>
+            </li>
+          ))}
+        </ol>
       </div>
 
       <div className="mt-12">
