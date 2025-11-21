@@ -38,10 +38,20 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
   const [mounted, setMounted] = useState(false)
   const [user, setUser] = useState<User | null>(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [isHomePage, setIsHomePage] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
+    // Check if we're on the home page
+    if (typeof window !== 'undefined') {
+      const pathname = window.location.pathname
+      setIsHomePage(
+        pathname === '/' || 
+        pathname === '/profile' || 
+        pathname === '/profile/'
+      )
+    }
   }, [])
 
   useEffect(() => {
@@ -91,6 +101,17 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
     window.location.href = homePath
   }
 
+  const handleMenuClick = (itemId: string) => {
+    if (isHomePage && !isNavLocked) {
+      // On home page, use onNavigate if not locked
+      onNavigate(itemId)
+    } else {
+      // Not on home page, navigate to home with section parameter
+      const homePath = createFullPath(`/?section=${itemId}`)
+      window.location.href = homePath
+    }
+  }
+
   return (
     <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-12 border-b border-gray-200 dark:border-slate-800">
       <a 
@@ -125,13 +146,13 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
             return (
               <button
                 key={item.id}
-                onClick={() => !isNavLocked && onNavigate(item.id)}
+                onClick={() => handleMenuClick(item.id)}
                 className={`nav-link transition duration-200 ${
                   isActive
                     ? 'active-nav-link text-tech-accent'
                     : 'text-secondary-text dark:text-zinc-300 hover:text-tech-accent dark:hover:text-tech-accent'
-                } ${isNavLocked ? 'disabled' : ''}`}
-                disabled={isNavLocked}
+                } ${isNavLocked && isHomePage ? 'disabled' : ''}`}
+                disabled={isNavLocked && isHomePage}
               >
                 {item.label}
               </button>
