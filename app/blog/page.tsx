@@ -6,6 +6,7 @@ import { blogService } from '@/lib/firebase/services'
 import type { BlogPost } from '@/lib/firebase/services'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import { createFullPath } from '@/lib/pathUtils'
 
 function BlogPostContent() {
   const router = useRouter()
@@ -37,11 +38,15 @@ function BlogPostContent() {
         const data = await blogService.getBySlug(slug)
         if (data) {
           setBlog(data)
+          // Set page title dynamically
+          document.title = `${data.title} | Parkpoom Wisedsri`
         } else {
           // Try to find by ID (backward compatibility)
           const byId = await blogService.get(slug)
           if (byId) {
             setBlog(byId)
+            // Set page title dynamically
+            document.title = `${byId.title} | Parkpoom Wisedsri`
           }
         }
       } catch (error) {
@@ -56,8 +61,16 @@ function BlogPostContent() {
     }
   }, [slug])
 
+  // Reset title when component unmounts
+  useEffect(() => {
+    return () => {
+      document.title = 'Profile | Parkpoom Wisedsri (ภาคภูมิ วิเศษศรี)'
+    }
+  }, [])
+
   const handleBack = () => {
-    router.push('/')
+    const homePath = createFullPath('/')
+    router.push(homePath)
   }
 
   if (loading) {

@@ -9,6 +9,7 @@ import PublicationDetail from '@/components/PublicationDetail'
 import BlogsSection from '@/components/BlogsSection'
 import BlogDetail from '@/components/BlogDetail'
 import Footer from '@/components/Footer'
+import { createFullPath } from '@/lib/pathUtils'
 
 type Section = 'about' | 'work' | 'blogs' | 'new-blogs' | 'blog-detail' | 'new-blog-detail'
 
@@ -60,9 +61,10 @@ export default function Home() {
   }
 
   const handleBlogClick = (id: string, slug?: string) => {
-    // If slug exists, navigate to SEO-friendly URL
+    // If slug exists, navigate to SEO-friendly URL with basePath
     if (slug) {
-      window.location.href = `/blog?slug=${slug}`
+      const blogPath = createFullPath(`/blog?slug=${slug}`)
+      window.location.href = blogPath
       return
     }
     // Fallback to old method for backward compatibility
