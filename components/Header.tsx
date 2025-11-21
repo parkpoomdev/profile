@@ -5,7 +5,6 @@ import { useEffect, useState, useRef } from 'react'
 import { auth } from '@/lib/firebase/config'
 import { onAuthStateChanged, User, signOut } from 'firebase/auth'
 import Link from 'next/link'
-import { createFullPath } from '@/lib/pathUtils'
 
 const lightIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -96,12 +95,12 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
           {navItems.map((item) => {
             const isActive = activeSection === item.id && !isNavLocked
             // If item has href, use Link, otherwise use button
+            // Note: Next.js Link automatically handles basePath, so we don't need createFullPath
             if ('href' in item && item.href) {
-              const fullHref = createFullPath(item.href)
               return (
                 <Link
                   key={item.id}
-                  href={fullHref}
+                  href={item.href}
                   className={`nav-link transition duration-200 ${
                     isActive
                       ? 'active-nav-link text-tech-accent'

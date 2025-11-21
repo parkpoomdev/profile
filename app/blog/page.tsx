@@ -87,13 +87,13 @@ function BlogPostContent() {
 
   const handleBack = () => {
     const blogsPath = createFullPath('/blogs')
-    router.push(blogsPath)
+    window.location.href = blogsPath
   }
 
   const handleEdit = () => {
     if (!blog?.id) return
     const editPath = createFullPath(`/admin?tab=blogs&edit=${blog.id}`)
-    router.push(editPath)
+    window.location.href = editPath
   }
 
   const handleDeleteClick = () => {
@@ -108,7 +108,7 @@ function BlogPostContent() {
       await blogService.delete(blog.id)
       // Redirect to blogs page after deletion
       const blogsPath = createFullPath('/blogs')
-      router.push(blogsPath)
+      window.location.href = blogsPath
     } catch (error) {
       console.error('Failed to delete blog post:', error)
       alert('Failed to delete blog post. Please try again.')

@@ -45,10 +45,10 @@ export default function BlogsPage() {
   const handleBlogClick = (slug?: string, id?: string) => {
     if (slug) {
       const blogPath = createFullPath(`/blog?slug=${slug}`)
-      router.push(blogPath)
+      window.location.href = blogPath
     } else if (id) {
       const blogPath = createFullPath(`/?blogId=${id}`)
-      router.push(blogPath)
+      window.location.href = blogPath
     }
   }
 
