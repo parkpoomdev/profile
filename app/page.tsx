@@ -62,7 +62,7 @@ export default function Home() {
   const handleBlogClick = (id: string, slug?: string) => {
     // If slug exists, navigate to SEO-friendly URL
     if (slug) {
-      window.location.href = `/blog/${slug}`
+      window.location.href = `/blog?slug=${slug}`
       return
     }
     // Fallback to old method for backward compatibility

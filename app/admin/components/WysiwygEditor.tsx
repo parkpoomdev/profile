@@ -1,6 +1,5 @@
 'use client'
 
-import { useRef } from 'react'
 import dynamic from 'next/dynamic'
 import 'react-quill/dist/quill.snow.css'
 
@@ -18,7 +17,6 @@ interface WysiwygEditorProps {
 }
 
 export default function WysiwygEditor({ value, onChange, placeholder, disabled }: WysiwygEditorProps) {
-  const quillRef = useRef<any>(null)
 
   const modules = {
     toolbar: [
@@ -50,7 +48,6 @@ export default function WysiwygEditor({ value, onChange, placeholder, disabled }
   return (
     <div className="wysiwyg-editor">
       <ReactQuill
-        ref={quillRef}
         theme="snow"
         value={value}
         onChange={onChange}

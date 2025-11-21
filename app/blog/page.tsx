@@ -1,27 +1,30 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { blogService } from '@/lib/firebase/services'
 import type { BlogPost } from '@/lib/firebase/services'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-export default function BlogPostPage() {
+function BlogPostContent() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [slug, setSlug] = useState<string>('')
   const [blog, setBlog] = useState<BlogPost | null>(null)
   const [loading, setLoading] = useState(true)
   const [activeSection, setActiveSection] = useState<string>('blog-detail')
 
   useEffect(() => {
-    // Get slug from URL path
+    // Get slug from URL - check both pathname and search params
     if (typeof window !== 'undefined') {
       const pathParts = window.location.pathname.split('/')
       const slugFromPath = pathParts[pathParts.length - 1]
-      setSlug(slugFromPath)
+      const slugFromParam = searchParams?.get('slug')
+      const slugToUse = slugFromPath !== 'blog' ? slugFromPath : (slugFromParam || '')
+      setSlug(slugToUse)
     }
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     const loadBlog = async () => {
@@ -124,6 +127,20 @@ export default function BlogPostPage() {
 
       <Footer />
     </div>
+  )
+}
+
+export default function BlogPostPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-4xl w-full mx-auto">
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
+        </div>
+      </div>
+    }>
+      <BlogPostContent />
+    </Suspense>
   )
 }
 
