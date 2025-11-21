@@ -1,0 +1,7 @@
+{
+  "rules": {
+    ".read": "now < 1765558800000",  // 2025-12-13 - Allows read until this date
+    ".write": "now < 1765558800000"  // 2025-12-13 - Allows write until this date (for dev/admin)
+  }
+}
+

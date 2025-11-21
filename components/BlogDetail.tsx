@@ -1,29 +1,8 @@
 'use client'
 
-import { useState } from 'react'
-
-interface BlogData {
-  title: string
-  date: string
-  content: string
-}
-
-const blogData: Record<string, BlogData> = {
-  runnable_scripts: {
-    title: 'Embedding Runnable Code Snippets in a Portfolio.',
-    date: 'Nov 10, 2025',
-    content: `
-      <p class="mb-6">One of the best ways to showcase technical skill is to demonstrate it live. Instead of just showing code, why not make it runnable? This portfolio uses simple, isolated JavaScript functions to power interactive components right inside a "blog post."</p>
-      <p class="mb-8">This approach is lightweight, doesn't require a complex backend, and provides immediate value to the user. Below is the live currency converter example that was featured in a previous version of this site.</p>
-      
-      <h3 class="text-3xl font-semibold mb-6 pt-4 border-t border-gray-100 dark:border-slate-800">Live Code Snippet: Currency Converter</h3>
-      <div data-converter-placeholder></div>
-      
-      <h3 class="text-2xl font-semibold mt-10 mb-4">Conclusion</h3>
-      <p class="text-secondary-text dark:text-zinc-300">This method proves that a "static" portfolio can still be a dynamic and engaging experience.</p>
-    `,
-  },
-}
+import { useState, useEffect } from 'react'
+import { blogService } from '@/lib/firebase/services'
+import type { BlogPost } from '@/lib/firebase/services'
 
 interface BlogDetailProps {
   blogId: string
@@ -55,7 +34,32 @@ function CurrencyConverter() {
 }
 
 export default function BlogDetail({ blogId, onBack }: BlogDetailProps) {
-  const blog = blogData[blogId]
+  const [blog, setBlog] = useState<BlogPost | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadBlog = async () => {
+      try {
+        const data = await blogService.get(blogId)
+        setBlog(data)
+      } catch (error) {
+        console.error('Failed to load blog post:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    if (blogId) {
+      loadBlog()
+    }
+  }, [blogId])
+
+  if (loading) {
+    return (
+      <section className="content-section fade-in active">
+        <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
+      </section>
+    )
+  }
 
   if (!blog) {
     return (
@@ -64,6 +68,9 @@ export default function BlogDetail({ blogId, onBack }: BlogDetailProps) {
       </section>
     )
   }
+
+  // Check if content contains converter placeholder
+  const hasConverter = blog.content.includes('data-converter-placeholder')
 
   return (
     <section className="content-section fade-in active">
@@ -81,7 +88,7 @@ export default function BlogDetail({ blogId, onBack }: BlogDetailProps) {
         <p className="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">{blog.date}</p>
         <h1 className="text-5xl font-extrabold mb-10 tracking-tighter">{blog.title}</h1>
         <div className="text-lg space-y-4 text-secondary-text dark:text-zinc-300">
-          {blogId === 'runnable_scripts' ? (
+          {hasConverter ? (
             <>
               <div dangerouslySetInnerHTML={{ __html: blog.content.split('<div data-converter-placeholder></div>')[0] }} />
               <div className="p-6 rounded-xl shadow-lg bg-gray-50 dark:bg-slate-800/70 border border-gray-200 dark:border-slate-700">

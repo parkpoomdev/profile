@@ -32,6 +32,20 @@ export default function Home() {
     return () => clearTimeout(timer)
   }, [activeSection])
 
+  useEffect(() => {
+    // Check for blogId in URL query parameter
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const blogIdParam = params.get('blogId')
+      if (blogIdParam) {
+        setBlogId(blogIdParam)
+        setActiveSection('new-blog-detail')
+        setIsNavLocked(true)
+        window.scrollTo(0, 0)
+      }
+    }
+  }, [])
+
   const handleNavigate = (section: string) => {
     setActiveSection(section as Section)
     setIsNavLocked(false)
@@ -45,7 +59,13 @@ export default function Home() {
     window.scrollTo(0, 0)
   }
 
-  const handleBlogClick = (id: string) => {
+  const handleBlogClick = (id: string, slug?: string) => {
+    // If slug exists, navigate to SEO-friendly URL
+    if (slug) {
+      window.location.href = `/blog/${slug}`
+      return
+    }
+    // Fallback to old method for backward compatibility
     setBlogId(id)
     setActiveSection('new-blog-detail')
     setIsNavLocked(true)

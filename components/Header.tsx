@@ -1,7 +1,10 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
+import { auth } from '@/lib/firebase/config'
+import { onAuthStateChanged, User, signOut } from 'firebase/auth'
+import Link from 'next/link'
 
 const lightIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -32,10 +35,45 @@ interface HeaderProps {
 export default function Header({ activeSection, onNavigate, isNavLocked }: HeaderProps) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    if (!auth) return
+
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser)
+    })
+
+    return () => unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false)
+      }
+    }
+
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [dropdownOpen])
+
+  const handleLogout = async () => {
+    if (!auth) return
+    setDropdownOpen(false)
+    await signOut(auth)
+  }
 
   const navItems = [
     { id: 'about', label: 'About me' },
@@ -80,6 +118,58 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
         >
           {mounted ? (isDark ? darkIcon : lightIcon) : <div className="w-5 h-5" />}
         </button>
+
+        {/* User Icon with Dropdown */}
+        {user && (
+          <div className="relative ml-4" ref={dropdownRef}>
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="minimal-btn"
+              aria-label="User menu"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-primary-text dark:text-dark-text"
+              >
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </button>
+
+            {/* Dropdown Menu */}
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-2 z-50">
+                <div className="px-4 py-2 border-b border-gray-200 dark:border-slate-700">
+                  <p className="text-xs text-secondary-text dark:text-zinc-400">เข้าสู่ระบบเป็น</p>
+                  <p className="text-sm font-medium text-primary-text dark:text-dark-text mt-1 truncate">
+                    {user.email}
+                  </p>
+                </div>
+                <Link
+                  href="/admin"
+                  className="block px-4 py-2 text-sm text-primary-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Admin Panel
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                >
+                  ออกจากระบบ
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </nav>
     </header>
   )

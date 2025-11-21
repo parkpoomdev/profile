@@ -1,5 +1,8 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { aboutService } from '@/lib/firebase/services'
+
 interface TimelineItem {
   id: string
   period: string
@@ -16,7 +19,8 @@ interface EducationItem {
   yearOfCompletion?: string
 }
 
-const educationData: EducationItem[] = [
+// Fallback data if Firebase is not available
+const defaultEducationData: EducationItem[] = [
   {
     id: 'phd-ait',
     period: '2023 - Present',
@@ -39,7 +43,7 @@ const educationData: EducationItem[] = [
   },
 ]
 
-const timelineData: TimelineItem[] = [
+const defaultTimelineData: TimelineItem[] = [
   {
     id: 'ra-ait',
     period: 'May 2023 - Present',
@@ -80,19 +84,57 @@ const timelineData: TimelineItem[] = [
 ]
 
 export default function AboutSection() {
+  const [aboutData, setAboutData] = useState<{
+    introduction: string
+    specialization: string
+    technicalSkills: string
+  } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadAboutData = async () => {
+      try {
+        const data = await aboutService.get()
+        if (data) {
+          setAboutData({
+            introduction: data.introduction || '',
+            specialization: data.specialization || '',
+            technicalSkills: data.technicalSkills || '',
+          })
+        }
+      } catch (error) {
+        console.error('Failed to load about data:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadAboutData()
+  }, [])
+
+  // Use Firebase data if available, otherwise use default text
+  const introduction = aboutData?.introduction || 'I am a doctoral student focused on developing digital systems that are purposeful, efficient, and visually coherent. My work bridges computational creativity with intuitive interface design, emphasizing clarity, usability, and data-driven insight.'
+  const specialization = aboutData?.specialization || 'Data Analytics and Visualisation in Information Technology'
+  const technicalSkills = aboutData?.technicalSkills || 'My technical expertise encompasses web application development utilising Python, Node.js, and JavaScript, database management with SQL, and mobile application development with Java for Android platforms.'
+
+  // Use default education and timeline data (can be extended to load from Firebase later)
+  const educationData = defaultEducationData
+  const timelineData = defaultTimelineData
+
   return (
     <section className="content-section fade-in active">
       <h2 className="text-5xl font-extrabold mb-10 tracking-tighter">Hello, I&apos;m Parkpoom Wisedsri.</h2>
       <div className="text-lg space-y-6 max-w-2xl text-secondary-text dark:text-zinc-300">
-        <p>
-          I am a doctoral student focused on developing digital systems that are purposeful, efficient, and visually coherent. My work bridges computational creativity with intuitive interface design, emphasizing clarity, usability, and data-driven insight.
-        </p>
-        <p>
-          Currently based in Pathum Thani, Thailand, I aim to specialise in <span className="text-tech-accent font-semibold">Data Analytics and Visualisation in Information Technology</span>.
-        </p>
-        <p>
-          My technical expertise encompasses web application development utilising Python, Node.js, and JavaScript, database management with SQL, and mobile application development with Java for Android platforms.
-        </p>
+        {loading ? (
+          <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
+        ) : (
+          <>
+            <p>{introduction}</p>
+            <p>
+              Currently based in Pathum Thani, Thailand, I aim to specialise in <span className="text-tech-accent font-semibold">{specialization}</span>.
+            </p>
+            <p>{technicalSkills}</p>
+          </>
+        )}
       </div>
 
       <div className="mt-12">

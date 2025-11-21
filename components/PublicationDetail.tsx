@@ -1,37 +1,8 @@
 'use client'
 
-interface PublicationData {
-  title: string
-  date: string
-  content: string
-}
-
-const publicationData: Record<string, PublicationData> = {
-  iceltics2024: {
-    title: 'Data analytics and visualization in bimanual rehabilitation monitoring systems: A user-centered design approach to healthcare professionals decision support.',
-    date: '2024 - ICELTICs',
-    content: `
-      <p class="mb-6"><strong>Full Citation:</strong> Wisedsri, P., Anutariya, C., Sujarae, A., Vachalathiti, R., & Bovonsunthonchai, S. (2024). Data analytics and visualization in bimanual rehabilitation monitoring systems: A user-centered design approach to healthcare professionals decision support. <em>Proceedings of the 2024 International Conference on Electrical Engineering and Informatics (ICELTICs).</em></p>
-      
-      <a href="https://doi.org/10.1109/ICELTICs62730.2024.10776145" target="_blank" rel="noopener noreferrer"
-         class="inline-block text-lg font-semibold text-tech-accent hover:underline">
-         View Publication (DOI) &rarr;
-      </a>
-    `,
-  },
-  tencon2023: {
-    title: 'Data Analytics and Visualisation System for Fall Detection for Elderly and Disabled People.',
-    date: '2023 - TENCON',
-    content: `
-      <p class="mb-6"><strong>Full Citation:</strong> P. Wisedsri and C. Anutariya, "Data Analytics and Visualisation System for Fall Detection for Elderly and Disabled People," <em>TENCON 2023 - 2023 IEEE Region 10 Conference (TENCON)</em>, Chiang Mai, Thailand, 2023, pp. 1315-1320.</p>
-      
-      <a href="https://doi.org/10.1109/TENCON58879.2023.10322370" target="_blank" rel="noopener noreferrer"
-         class="inline-block text-lg font-semibold text-tech-accent hover:underline">
-         View Publication (DOI) &rarr;
-      </a>
-    `,
-  },
-}
+import { useState, useEffect } from 'react'
+import { publicationService } from '@/lib/firebase/services'
+import type { Publication } from '@/lib/firebase/services'
 
 interface PublicationDetailProps {
   publicationId: string
@@ -39,7 +10,32 @@ interface PublicationDetailProps {
 }
 
 export default function PublicationDetail({ publicationId, onBack }: PublicationDetailProps) {
-  const publication = publicationData[publicationId]
+  const [publication, setPublication] = useState<Publication | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const loadPublication = async () => {
+      try {
+        const data = await publicationService.get(publicationId)
+        setPublication(data)
+      } catch (error) {
+        console.error('Failed to load publication:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    if (publicationId) {
+      loadPublication()
+    }
+  }, [publicationId])
+
+  if (loading) {
+    return (
+      <section className="content-section fade-in active">
+        <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
+      </section>
+    )
+  }
 
   if (!publication) {
     return (
@@ -48,6 +44,14 @@ export default function PublicationDetail({ publicationId, onBack }: Publication
       </section>
     )
   }
+
+  // Build content from publication data
+  const content = publication.citation 
+    ? `<p class="mb-6"><strong>Full Citation:</strong> ${publication.citation}</p>`
+    : ''
+  const doiLink = publication.doi
+    ? `<a href="${publication.doi}" target="_blank" rel="noopener noreferrer" class="inline-block text-lg font-semibold text-tech-accent hover:underline">View Publication (DOI) &rarr;</a>`
+    : ''
 
   return (
     <section className="content-section fade-in active">
@@ -64,10 +68,12 @@ export default function PublicationDetail({ publicationId, onBack }: Publication
       <div className="max-w-3xl mx-auto">
         <p className="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">{publication.date}</p>
         <h1 className="text-5xl font-extrabold mb-10 tracking-tighter">{publication.title}</h1>
-        <div
-          className="text-lg space-y-4 text-secondary-text dark:text-zinc-300"
-          dangerouslySetInnerHTML={{ __html: publication.content }}
-        />
+        <div className="text-lg space-y-4 text-secondary-text dark:text-zinc-300">
+          {publication.description && <p>{publication.description}</p>}
+          {(content || doiLink) && (
+            <div dangerouslySetInnerHTML={{ __html: content + doiLink }} />
+          )}
+        </div>
       </div>
     </section>
   )

@@ -1,0 +1,27 @@
+{
+  "rules": {
+    // Public read access for portfolio content
+    "about": {
+      ".read": true,
+      ".write": false
+    },
+    "work": {
+      ".read": true,
+      ".write": false
+    },
+    "publications": {
+      ".read": true,
+      ".write": false
+    },
+    "blogs": {
+      ".read": true,
+      ".write": false
+    },
+    // Default: deny all other access
+    "$other": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
+
