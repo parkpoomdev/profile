@@ -60,7 +60,7 @@ NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=your-measurement-id
 
 **Important:** 
 - Replace all `your-*-here` values with your actual Firebase configuration values
-- The `databaseURL` is hardcoded in `lib/firebase/config.ts`. If you need to change it, update that file directly.
+- Add `NEXT_PUBLIC_FIREBASE_DATABASE_URL` with your database URL from Firebase Console
 
 ## Step 5: Restart Your Dev Server
 
@@ -100,7 +100,7 @@ Alternatively, go to `http://localhost:3000/admin/migrate` to see the connection
 ### "Network Error" or Connection Timeout
 
 - **Check:** Realtime Database is enabled in Firebase Console
-- **Check:** Database URL is correct in `lib/firebase/config.ts`
+- **Check:** Database URL is set correctly in `.env.local` file
 - **Check:** Your internet connection is working
 - **Check:** Firebase project is active (not deleted/suspended)
 
