@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { aboutService, workService, publicationService, blogService, generateUniqueSlug } from '@/lib/firebase/services'
 import type { AboutData, WorkItem, Publication, BlogPost } from '@/lib/firebase/services'
 import AuthGuard from './components/AuthGuard'
@@ -8,7 +9,8 @@ import WysiwygEditor from './components/WysiwygEditor'
 
 type Tab = 'about' | 'work' | 'publications' | 'blogs'
 
-function AdminPanel() {
+function AdminPanelContent() {
+  const searchParams = useSearchParams()
   const [activeTab, setActiveTab] = useState<Tab>('about')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
@@ -31,6 +33,29 @@ function AdminPanel() {
   // Blogs state
   const [blogs, setBlogs] = useState<BlogPost[]>([])
   const [editingBlog, setEditingBlog] = useState<BlogPost | null>(null)
+
+  // Handle URL query parameters
+  useEffect(() => {
+    const tab = searchParams?.get('tab') as Tab | null
+    const editId = searchParams?.get('edit')
+    
+    if (tab && ['about', 'work', 'publications', 'blogs'].includes(tab)) {
+      setActiveTab(tab)
+    }
+    
+    if (editId && tab === 'blogs') {
+      // Load blogs and find the one to edit
+      blogService.getAll().then(items => {
+        const blogToEdit = items.find(b => b.id === editId)
+        if (blogToEdit) {
+          setEditingBlog(blogToEdit)
+        }
+      }).catch(error => {
+        console.error('Failed to load blogs for editing:', error)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
 
   useEffect(() => {
     loadData()
@@ -576,8 +601,20 @@ function BlogEditor({ items, editing, onEdit, onSave, onDelete, loading }: {
   onDelete: (id: string) => void
   loading: boolean
 }) {
-  const [formData, setFormData] = useState({ date: '', title: '', description: '', content: '', slug: '' })
+  const [formData, setFormData] = useState({ date: '', title: '', description: '', content: '', slug: '', tags: '' })
   const [slugPreview, setSlugPreview] = useState('')
+
+  // Get current date and time as default
+  const getCurrentDateTime = () => {
+    const now = new Date()
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    const month = months[now.getMonth()]
+    const day = now.getDate()
+    const year = now.getFullYear()
+    const hours = now.getHours().toString().padStart(2, '0')
+    const minutes = now.getMinutes().toString().padStart(2, '0')
+    return `${month} ${day}, ${year} ${hours}:${minutes}`
+  }
 
   useEffect(() => {
     if (editing) {
@@ -587,10 +624,18 @@ function BlogEditor({ items, editing, onEdit, onSave, onDelete, loading }: {
         description: editing.description,
         content: editing.content,
         slug: editing.slug || '',
+        tags: editing.tags ? editing.tags.join(', ') : '',
       })
       setSlugPreview(editing.slug || '')
     } else {
-      setFormData({ date: '', title: '', description: '', content: '', slug: '' })
+      setFormData({ 
+        date: getCurrentDateTime(), 
+        title: '', 
+        description: '', 
+        content: '', 
+        slug: '', 
+        tags: '' 
+      })
       setSlugPreview('')
     }
   }, [editing])
@@ -605,8 +650,26 @@ function BlogEditor({ items, editing, onEdit, onSave, onDelete, loading }: {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSave(formData)
-    setFormData({ date: '', title: '', description: '', content: '', slug: '' })
+    // Convert tags string to array
+    const tagsArray = formData.tags
+      ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+      : []
+    
+    const dataToSave = {
+      ...formData,
+      tags: tagsArray,
+    }
+    delete (dataToSave as any).tags // Remove the string version
+    
+    onSave({
+      date: dataToSave.date,
+      title: dataToSave.title,
+      description: dataToSave.description,
+      content: dataToSave.content,
+      slug: dataToSave.slug,
+      tags: tagsArray,
+    })
+    setFormData({ date: getCurrentDateTime(), title: '', description: '', content: '', slug: '', tags: '' })
     setSlugPreview('')
   }
 
@@ -618,10 +681,17 @@ function BlogEditor({ items, editing, onEdit, onSave, onDelete, loading }: {
         </h3>
         <input
           type="text"
-          placeholder="Date (e.g., Nov 10, 2025)"
+          placeholder="Date (e.g., Nov 10, 2025 14:30)"
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
           required
+          className="w-full p-3 border border-gray-300 dark:border-slate-600 rounded-lg bg-primary-bg dark:bg-slate-800 text-primary-text dark:text-dark-text"
+        />
+        <input
+          type="text"
+          placeholder="Tags (comma-separated, e.g., React, Next.js, TypeScript)"
+          value={formData.tags}
+          onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
           className="w-full p-3 border border-gray-300 dark:border-slate-600 rounded-lg bg-primary-bg dark:bg-slate-800 text-primary-text dark:text-dark-text"
         />
         <input
@@ -727,6 +797,18 @@ function BlogEditor({ items, editing, onEdit, onSave, onDelete, loading }: {
 }
 
 
+
+function AdminPanel() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-primary-bg dark:bg-dark-bg flex items-center justify-center">
+        <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
+      </div>
+    }>
+      <AdminPanelContent />
+    </Suspense>
+  )
+}
 
 export default function AdminPage() {
   return (

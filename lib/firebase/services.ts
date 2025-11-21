@@ -39,6 +39,7 @@ export interface BlogPost {
   description: string
   content: string
   slug?: string
+  tags?: string[]
 }
 
 // Utility function to generate URL-friendly slug from title

@@ -24,6 +24,10 @@ export function getBasePath(): string {
  */
 export function createFullPath(path: string): string {
   const basePath = getBasePath()
+  // If path is just '/', return basePath + '/' or just '/'
+  if (path === '/') {
+    return basePath || '/'
+  }
   // Ensure path starts with /
   const cleanPath = path.startsWith('/') ? path : `/${path}`
   return `${basePath}${cleanPath}`

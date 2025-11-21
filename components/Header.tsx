@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from 'react'
 import { auth } from '@/lib/firebase/config'
 import { onAuthStateChanged, User, signOut } from 'firebase/auth'
 import Link from 'next/link'
+import { createFullPath } from '@/lib/pathUtils'
 
 const lightIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -75,11 +76,11 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
     await signOut(auth)
   }
 
-  const navItems = [
+  const navItems: Array<{ id: string; label: string; href?: string }> = [
     { id: 'about', label: 'About me' },
     { id: 'work', label: 'Work' },
     { id: 'blogs', label: 'Publications' },
-    { id: 'new-blogs', label: 'Blogs' },
+    { id: 'new-blogs', label: 'Blogs', href: '/blogs' },
   ]
 
   const isDark = theme === 'dark'
@@ -94,6 +95,23 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
         <div className="flex space-x-6">
           {navItems.map((item) => {
             const isActive = activeSection === item.id && !isNavLocked
+            // If item has href, use Link, otherwise use button
+            if ('href' in item && item.href) {
+              const fullHref = createFullPath(item.href)
+              return (
+                <Link
+                  key={item.id}
+                  href={fullHref}
+                  className={`nav-link transition duration-200 ${
+                    isActive
+                      ? 'active-nav-link text-tech-accent'
+                      : 'text-secondary-text dark:text-zinc-300 hover:text-tech-accent dark:hover:text-tech-accent'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
+            }
             return (
               <button
                 key={item.id}
