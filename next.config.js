@@ -8,9 +8,9 @@ const nextConfig = {
     unoptimized: true,
   },
   // Base path for GitHub Pages (update 'profile' to match your repository name)
-  // Only applies in production build, dev mode uses empty basePath
-  basePath: process.env.NODE_ENV === 'production' ? '/profile' : '',
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/profile' : '',
+  // Use environment variable or default to '/profile' for builds, empty for dev
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || (process.env.NODE_ENV === 'production' ? '/profile' : ''),
+  assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || (process.env.NODE_ENV === 'production' ? '/profile' : ''),
   // Disable trailing slash for cleaner URLs
   trailingSlash: false,
 }
