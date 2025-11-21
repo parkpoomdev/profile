@@ -11,7 +11,7 @@ import BlogDetail from '@/components/BlogDetail'
 import Footer from '@/components/Footer'
 import { createFullPath } from '@/lib/pathUtils'
 
-type Section = 'about' | 'work' | 'blogs' | 'new-blogs' | 'blog-detail' | 'new-blog-detail'
+type Section = 'about' | 'work' | 'publications' | 'blogs' | 'blog-detail' | 'new-blog-detail'
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<Section>('about')
@@ -75,13 +75,13 @@ export default function Home() {
   }
 
   const handleBackToPublications = () => {
-    setActiveSection('blogs')
+    setActiveSection('publications')
     setIsNavLocked(false)
     window.scrollTo(0, 0)
   }
 
   const handleBackToBlogs = () => {
-    setActiveSection('new-blogs')
+    setActiveSection('blogs')
     setIsNavLocked(false)
     window.scrollTo(0, 0)
   }
@@ -97,11 +97,11 @@ export default function Home() {
       <main className="py-16">
         {activeSection === 'about' && <AboutSection />}
         {activeSection === 'work' && <WorkSection />}
-        {activeSection === 'blogs' && <PublicationsSection onPublicationClick={handlePublicationClick} />}
+        {activeSection === 'publications' && <PublicationsSection onPublicationClick={handlePublicationClick} />}
         {activeSection === 'blog-detail' && (
           <PublicationDetail publicationId={publicationId} onBack={handleBackToPublications} />
         )}
-        {activeSection === 'new-blogs' && <BlogsSection onBlogClick={handleBlogClick} />}
+        {activeSection === 'blogs' && <BlogsSection onBlogClick={handleBlogClick} />}
         {activeSection === 'new-blog-detail' && (
           <BlogDetail blogId={blogId} onBack={handleBackToBlogs} />
         )}

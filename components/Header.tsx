@@ -78,8 +78,8 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
   const navItems: Array<{ id: string; label: string; href?: string }> = [
     { id: 'about', label: 'About me' },
     { id: 'work', label: 'Work' },
-    { id: 'blogs', label: 'Publications' },
-    { id: 'new-blogs', label: 'Blogs', href: '/blogs' },
+    { id: 'publications', label: 'Publications' },
+    { id: 'blogs', label: 'Blogs', href: '/blogs' },
   ]
 
   const isDark = theme === 'dark'
