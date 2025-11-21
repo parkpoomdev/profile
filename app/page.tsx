@@ -34,14 +34,20 @@ export default function Home() {
   }, [activeSection])
 
   useEffect(() => {
-    // Check for blogId in URL query parameter
+    // Check for blogId or section in URL query parameter
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search)
       const blogIdParam = params.get('blogId')
+      const sectionParam = params.get('section')
+      
       if (blogIdParam) {
         setBlogId(blogIdParam)
         setActiveSection('new-blog-detail')
         setIsNavLocked(true)
+        window.scrollTo(0, 0)
+      } else if (sectionParam && ['about', 'work', 'publications', 'blogs'].includes(sectionParam)) {
+        setActiveSection(sectionParam as Section)
+        setIsNavLocked(false)
         window.scrollTo(0, 0)
       }
     }

@@ -52,11 +52,17 @@ export default function BlogsPage() {
     }
   }
 
+  const handleNavigate = (section: string) => {
+    // Navigate to home page with section parameter
+    const homePath = createFullPath(`/?section=${section}`)
+    window.location.href = homePath
+  }
+
   return (
     <div className="max-w-6xl w-full mx-auto">
       <Header
         activeSection="blogs"
-        onNavigate={() => {}}
+        onNavigate={handleNavigate}
         isNavLocked={false}
       />
 

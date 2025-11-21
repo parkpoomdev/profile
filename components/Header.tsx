@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from 'react'
 import { auth } from '@/lib/firebase/config'
 import { onAuthStateChanged, User, signOut } from 'firebase/auth'
 import Link from 'next/link'
+import { createFullPath } from '@/lib/pathUtils'
 
 const lightIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -84,9 +85,19 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
 
   const isDark = theme === 'dark'
 
+  const handleHomeClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const homePath = createFullPath('/')
+    window.location.href = homePath
+  }
+
   return (
     <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-12 border-b border-gray-200 dark:border-slate-800">
-      <a href="#" className="text-3xl font-bold tracking-tight mb-4 sm:mb-0 hover:text-tech-accent dark:hover:text-tech-accent transition duration-300">
+      <a 
+        href="/" 
+        onClick={handleHomeClick}
+        className="text-3xl font-bold tracking-tight mb-4 sm:mb-0 hover:text-tech-accent dark:hover:text-tech-accent transition duration-300"
+      >
         Parkpoom Wisedsri
       </a>
 
