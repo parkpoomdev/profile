@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { aboutService, workService, publicationService, blogService, generateUniqueSlug } from '@/lib/firebase/services'
 import type { AboutData, WorkItem, Publication, BlogPost } from '@/lib/firebase/services'
+import { createFullPath } from '@/lib/pathUtils'
 import AuthGuard from './components/AuthGuard'
 import WysiwygEditor from './components/WysiwygEditor'
 
@@ -753,7 +754,7 @@ function BlogEditor({ items, editing, onEdit, onSave, onDelete, loading }: {
               </div>
               <div className="flex space-x-2">
                 <a
-                  href={item.slug ? `/blog?slug=${item.slug}` : `/?blogId=${item.id}`}
+                  href={item.slug ? createFullPath(`/blog?slug=${item.slug}`) : createFullPath(`/?blogId=${item.id}`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-4 py-2 bg-green-500 text-white rounded hover:opacity-90 flex items-center gap-2"
