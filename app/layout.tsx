@@ -5,6 +5,10 @@ import { ThemeProvider } from './providers/ThemeProvider'
 
 const inter = Inter({ subsets: ['latin'] })
 
+// Get basePath for manifest (respects GitHub Pages basePath)
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || (process.env.NODE_ENV === 'production' ? '/profile' : '')
+const manifestPath = `${basePath}/manifest.json`
+
 export const metadata: Metadata = {
   title: 'Profile | Parkpoom Wisedsri (ภาคภูมิ วิเศษศรี)',
   description:
@@ -17,7 +21,7 @@ export const metadata: Metadata = {
     'Telehealth',
     'Visualization',
   ],
-  manifest: '/manifest.json',
+  manifest: manifestPath,
   openGraph: {
     title: 'Parkpoom Wisedsri | Portfolio (ภาคภูมิ วิเศษศรี)',
     description:
