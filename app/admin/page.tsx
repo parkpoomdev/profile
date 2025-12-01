@@ -223,7 +223,7 @@ function AdminPanelContent() {
 
   return (
     <div className="min-h-screen bg-primary-bg dark:bg-dark-bg">
-      <div className="max-w-6xl mx-auto px-8 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8">
 
         {message && (
           <div className={`mb-4 p-4 rounded-lg ${
@@ -235,12 +235,12 @@ function AdminPanelContent() {
           </div>
         )}
 
-        <div className="flex space-x-4 mb-8 border-b border-gray-200 dark:border-slate-700">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 sm:gap-0 sm:space-x-4 mb-6 sm:mb-8 border-b border-gray-200 dark:border-slate-700 overflow-x-auto">
           {(['about', 'work', 'publications', 'blogs'] as Tab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 font-medium transition ${
+              className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-medium transition whitespace-nowrap ${
                 activeTab === tab
                   ? 'border-b-2 border-tech-accent text-tech-accent'
                   : 'text-secondary-text dark:text-zinc-400 hover:text-primary-text dark:hover:text-dark-text'
@@ -802,7 +802,7 @@ function BlogEditor({ items, editing, onEdit, onSave, onDelete, loading }: {
 function AdminPanel() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-primary-bg dark:bg-dark-bg flex items-center justify-center">
+      <div className="min-h-screen bg-primary-bg dark:bg-dark-bg flex items-center justify-center px-4">
         <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
       </div>
     }>

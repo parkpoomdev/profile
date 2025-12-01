@@ -124,7 +124,7 @@ function BlogPostContent() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl w-full mx-auto">
+      <div className="max-w-4xl w-full mx-auto px-0 sm:px-2">
         <div className="min-h-screen flex items-center justify-center">
           <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
         </div>
@@ -134,13 +134,13 @@ function BlogPostContent() {
 
   if (!blog) {
     return (
-      <div className="max-w-4xl w-full mx-auto">
+      <div className="max-w-4xl w-full mx-auto px-0 sm:px-2">
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <p className="text-xl text-red-500 mb-4">Post not found.</p>
+          <div className="text-center px-4">
+            <p className="text-lg sm:text-xl text-red-500 mb-4">Post not found.</p>
             <button
               onClick={handleBack}
-              className="px-6 py-2 bg-tech-accent text-white rounded-lg hover:opacity-90"
+              className="px-4 sm:px-6 py-2 text-sm sm:text-base bg-tech-accent text-white rounded-lg hover:opacity-90"
             >
               Back to Home
             </button>
@@ -154,35 +154,35 @@ function BlogPostContent() {
   const hasConverter = blog.content.includes('data-converter-placeholder')
 
   return (
-    <div className="max-w-4xl w-full mx-auto">
+    <div className="max-w-4xl w-full mx-auto px-0 sm:px-2">
       <Header
         activeSection={activeSection}
         onNavigate={() => {}}
         isNavLocked={true}
       />
 
-      <main className="py-16">
+      <main className="py-8 sm:py-12 md:py-16">
         <section className="content-section fade-in active">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
             <button
               onClick={handleBack}
-              className="text-secondary-text dark:text-zinc-400 hover:text-tech-accent dark:hover:text-tech-accent transition"
+              className="text-sm sm:text-base text-secondary-text dark:text-zinc-400 hover:text-tech-accent dark:hover:text-tech-accent transition"
             >
               ← Back to Blogs
             </button>
             
             {user && blog?.id && (
-              <div className="flex gap-2">
+              <div className="flex gap-2 w-full sm:w-auto">
                 <button
                   onClick={handleEdit}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:opacity-90 transition"
+                  className="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-sm sm:text-base bg-blue-500 text-white rounded-lg hover:opacity-90 transition"
                 >
                   Edit
                 </button>
                 <button
                   onClick={handleDeleteClick}
                   disabled={deleting}
-                  className="px-4 py-2 bg-red-500 text-white rounded-lg hover:opacity-90 transition disabled:opacity-50"
+                  className="flex-1 sm:flex-none px-3 sm:px-4 py-2 text-sm sm:text-base bg-red-500 text-white rounded-lg hover:opacity-90 transition disabled:opacity-50"
                 >
                   {deleting ? 'Deleting...' : 'Delete'}
                 </button>
@@ -190,10 +190,10 @@ function BlogPostContent() {
             )}
           </div>
 
-          <p className="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">
+          <p className="text-xs sm:text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">
             {blog.date}
           </p>
-          <h1 className="text-5xl font-extrabold mb-10 tracking-tighter text-primary-text dark:text-dark-text">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 sm:mb-8 md:mb-10 tracking-tighter text-primary-text dark:text-dark-text">
             {blog.title}
           </h1>
           
@@ -210,7 +210,7 @@ function BlogPostContent() {
             </div>
           )}
           <div
-            className="text-lg space-y-4 text-secondary-text dark:text-zinc-300 prose prose-lg dark:prose-invert max-w-none"
+            className="text-base sm:text-lg space-y-4 text-secondary-text dark:text-zinc-300 prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
 
@@ -239,7 +239,7 @@ function BlogPostContent() {
 export default function BlogPostPage() {
   return (
     <Suspense fallback={
-      <div className="max-w-4xl w-full mx-auto">
+      <div className="max-w-4xl w-full mx-auto px-0 sm:px-2">
         <div className="min-h-screen flex items-center justify-center">
           <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
         </div>

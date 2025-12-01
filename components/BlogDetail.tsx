@@ -15,18 +15,18 @@ function CurrencyConverter() {
   const eur = (usd * rate).toFixed(2)
 
   return (
-    <div className="space-y-4">
-      <h4 className="text-xl font-bold text-tech-accent mb-4">USD to EUR Converter</h4>
+    <div className="space-y-3 sm:space-y-4">
+      <h4 className="text-lg sm:text-xl font-bold text-tech-accent mb-3 sm:mb-4">USD to EUR Converter</h4>
       <input
         type="number"
         value={usd}
         onChange={(e) => setUsd(parseFloat(e.target.value) || 0)}
         placeholder="Enter USD amount"
-        className="w-full p-3 rounded-md border border-gray-300 dark:border-slate-600 dark:bg-slate-900 text-primary-text dark:text-dark-text focus:ring-tech-accent focus:border-tech-accent transition"
+        className="w-full p-2 sm:p-3 text-sm sm:text-base rounded-md border border-gray-300 dark:border-slate-600 dark:bg-slate-900 text-primary-text dark:text-dark-text focus:ring-tech-accent focus:border-tech-accent transition"
       />
       <div className="flex justify-between items-center text-secondary-text dark:text-zinc-400">
-        <span className="text-lg">Result:</span>
-        <span className="text-2xl font-extrabold text-primary-text dark:text-dark-text">€{eur}</span>
+        <span className="text-base sm:text-lg">Result:</span>
+        <span className="text-xl sm:text-2xl font-extrabold text-primary-text dark:text-dark-text">€{eur}</span>
       </div>
       <p className="text-xs text-secondary-text dark:text-zinc-500">Exchange Rate (USD to EUR): 0.92</p>
     </div>
@@ -76,7 +76,7 @@ export default function BlogDetail({ blogId, onBack }: BlogDetailProps) {
     <section className="content-section fade-in active">
       <button
         onClick={onBack}
-        className="text-tech-accent mb-8 flex items-center hover:underline transition duration-200"
+        className="text-sm sm:text-base text-tech-accent mb-6 sm:mb-8 flex items-center hover:underline transition duration-200"
       >
         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -85,13 +85,13 @@ export default function BlogDetail({ blogId, onBack }: BlogDetailProps) {
       </button>
 
       <div className="max-w-3xl mx-auto">
-        <p className="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">{blog.date}</p>
-        <h1 className="text-5xl font-extrabold mb-10 tracking-tighter">{blog.title}</h1>
-        <div className="text-lg space-y-4 text-secondary-text dark:text-zinc-300">
+        <p className="text-xs sm:text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">{blog.date}</p>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 sm:mb-8 md:mb-10 tracking-tighter">{blog.title}</h1>
+        <div className="text-base sm:text-lg space-y-3 sm:space-y-4 text-secondary-text dark:text-zinc-300 prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none">
           {hasConverter ? (
             <>
               <div dangerouslySetInnerHTML={{ __html: blog.content.split('<div data-converter-placeholder></div>')[0] }} />
-              <div className="p-6 rounded-xl shadow-lg bg-gray-50 dark:bg-slate-800/70 border border-gray-200 dark:border-slate-700">
+              <div className="p-4 sm:p-6 rounded-xl shadow-lg bg-gray-50 dark:bg-slate-800/70 border border-gray-200 dark:border-slate-700">
                 <CurrencyConverter />
               </div>
               <div dangerouslySetInnerHTML={{ __html: blog.content.split('<div data-converter-placeholder></div>')[1] }} />

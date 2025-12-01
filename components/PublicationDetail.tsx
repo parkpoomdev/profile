@@ -57,7 +57,7 @@ export default function PublicationDetail({ publicationId, onBack }: Publication
     <section className="content-section fade-in active">
       <button
         onClick={onBack}
-        className="text-tech-accent mb-8 flex items-center hover:underline transition duration-200"
+        className="text-sm sm:text-base text-tech-accent mb-6 sm:mb-8 flex items-center hover:underline transition duration-200"
       >
         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -66,12 +66,12 @@ export default function PublicationDetail({ publicationId, onBack }: Publication
       </button>
 
       <div className="max-w-3xl mx-auto">
-        <p className="text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">{publication.date}</p>
-        <h1 className="text-5xl font-extrabold mb-10 tracking-tighter">{publication.title}</h1>
-        <div className="text-lg space-y-4 text-secondary-text dark:text-zinc-300">
+        <p className="text-xs sm:text-sm uppercase tracking-wider text-secondary-text dark:text-zinc-500 mb-2">{publication.date}</p>
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 sm:mb-8 md:mb-10 tracking-tighter">{publication.title}</h1>
+        <div className="text-base sm:text-lg space-y-3 sm:space-y-4 text-secondary-text dark:text-zinc-300">
           {publication.description && <p>{publication.description}</p>}
           {(content || doiLink) && (
-            <div dangerouslySetInnerHTML={{ __html: content + doiLink }} />
+            <div className="prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: content + doiLink }} />
           )}
         </div>
       </div>

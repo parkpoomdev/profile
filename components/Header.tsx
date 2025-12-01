@@ -39,6 +39,7 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
   const [user, setUser] = useState<User | null>(null)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [isHomePage, setIsHomePage] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -113,16 +114,39 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
   }
 
   return (
-    <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-12 border-b border-gray-200 dark:border-slate-800">
-      <a 
-        href="/" 
-        onClick={handleHomeClick}
-        className="text-3xl font-bold tracking-tight mb-4 sm:mb-0 hover:text-tech-accent dark:hover:text-tech-accent transition duration-300"
-      >
-        Parkpoom Wisedsri
-      </a>
+    <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-8 sm:pb-12 border-b border-gray-200 dark:border-slate-800">
+      <div className="flex items-center justify-between w-full sm:w-auto mb-4 sm:mb-0">
+        <a 
+          href="/" 
+          onClick={handleHomeClick}
+          className="text-2xl sm:text-3xl font-bold tracking-tight hover:text-tech-accent dark:hover:text-tech-accent transition duration-300"
+        >
+          Parkpoom Wisedsri
+        </a>
 
-      <nav className="flex items-center space-x-6 text-base font-medium">
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="sm:hidden minimal-btn ml-4"
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          ) : (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          )}
+        </button>
+      </div>
+
+      {/* Desktop Navigation */}
+      <nav className="hidden sm:flex items-center space-x-6 text-base font-medium">
         <div className="flex space-x-6">
           {navItems.map((item) => {
             const isActive = activeSection === item.id && !isNavLocked
@@ -220,6 +244,113 @@ export default function Header({ activeSection, onNavigate, isNavLocked }: Heade
           </div>
         )}
       </nav>
+
+      {/* Mobile Navigation */}
+      {mobileMenuOpen && (
+        <nav className="sm:hidden w-full mt-4 pt-4 border-t border-gray-200 dark:border-slate-800">
+          <div className="flex flex-col space-y-4">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id && !isNavLocked
+              if ('href' in item && item.href) {
+                return (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`text-base font-medium transition duration-200 py-2 ${
+                      isActive
+                        ? 'text-tech-accent border-l-4 border-tech-accent pl-3'
+                        : 'text-secondary-text dark:text-zinc-300 hover:text-tech-accent dark:hover:text-tech-accent pl-3'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              }
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    handleMenuClick(item.id)
+                    setMobileMenuOpen(false)
+                  }}
+                  className={`text-base font-medium transition duration-200 py-2 text-left ${
+                    isActive
+                      ? 'text-tech-accent border-l-4 border-tech-accent pl-3'
+                      : 'text-secondary-text dark:text-zinc-300 hover:text-tech-accent dark:hover:text-tech-accent pl-3'
+                  } ${isNavLocked && isHomePage ? 'opacity-50 pointer-events-none' : ''}`}
+                  disabled={isNavLocked && isHomePage}
+                >
+                  {item.label}
+                </button>
+              )
+            })}
+          </div>
+          
+          <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-slate-800">
+            <button
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+              aria-label="Toggle dark mode"
+              className="minimal-btn"
+            >
+              {mounted ? (isDark ? darkIcon : lightIcon) : <div className="w-5 h-5" />}
+            </button>
+
+            {user && (
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
+                  className="minimal-btn"
+                  aria-label="User menu"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-primary-text dark:text-dark-text"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </button>
+
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 py-2 z-50">
+                    <div className="px-4 py-2 border-b border-gray-200 dark:border-slate-700">
+                      <p className="text-xs text-secondary-text dark:text-zinc-400">เข้าสู่ระบบเป็น</p>
+                      <p className="text-sm font-medium text-primary-text dark:text-dark-text mt-1 truncate">
+                        {user.email}
+                      </p>
+                    </div>
+                    <Link
+                      href="/admin"
+                      className="block px-4 py-2 text-sm text-primary-text dark:text-dark-text hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                      onClick={() => {
+                        setDropdownOpen(false)
+                        setMobileMenuOpen(false)
+                      }}
+                    >
+                      Admin Panel
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition"
+                    >
+                      ออกจากระบบ
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </nav>
+      )}
     </header>
   )
 }

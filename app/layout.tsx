@@ -22,6 +22,11 @@ export const metadata: Metadata = {
     'Visualization',
   ],
   manifest: manifestPath,
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+  },
   openGraph: {
     title: 'Parkpoom Wisedsri | Portfolio (ภาคภูมิ วิเศษศรี)',
     description:
@@ -45,7 +50,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
-      <body className={`${inter.className} antialiased min-h-full flex flex-col pt-10 px-4 md:px-6`}>
+      <body className={`${inter.className} antialiased min-h-full flex flex-col pt-4 sm:pt-6 md:pt-10 px-4 sm:px-5 md:px-6`}>
         <ThemeProvider>
           {children}
         </ThemeProvider>

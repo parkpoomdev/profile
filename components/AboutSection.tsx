@@ -122,8 +122,8 @@ export default function AboutSection() {
 
   return (
     <section className="content-section fade-in active">
-      <h2 className="text-5xl font-extrabold mb-10 tracking-tighter">Hello, I&apos;m Parkpoom Wisedsri.</h2>
-      <div className="text-lg space-y-6 max-w-2xl text-secondary-text dark:text-zinc-300">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 sm:mb-8 md:mb-10 tracking-tighter">Hello, I&apos;m Parkpoom Wisedsri.</h2>
+      <div className="text-base sm:text-lg space-y-4 sm:space-y-6 max-w-2xl text-secondary-text dark:text-zinc-300">
         {loading ? (
           <p className="text-secondary-text dark:text-zinc-400">Loading...</p>
         ) : (
@@ -137,15 +137,15 @@ export default function AboutSection() {
         )}
       </div>
 
-      <div className="mt-12">
-        <h3 className="text-3xl font-bold mb-10 tracking-tight">Education Profile</h3>
+      <div className="mt-8 sm:mt-10 md:mt-12">
+        <h3 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 md:mb-10 tracking-tight">Education Profile</h3>
         
         <ol className="relative border-s border-gray-300 dark:border-gray-700">
           {educationData.map((item, index) => (
             <li
               key={item.id}
-              className={`ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200 ${
-                index < educationData.length - 1 ? 'mb-10' : ''
+              className={`ms-4 sm:ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200 ${
+                index < educationData.length - 1 ? 'mb-6 sm:mb-8 md:mb-10' : ''
               }`}
             >
               <div className="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>
@@ -157,15 +157,15 @@ export default function AboutSection() {
         </ol>
       </div>
 
-      <div className="mt-12">
-        <h3 className="text-3xl font-bold mb-10 tracking-tight">Professional Timeline</h3>
+      <div className="mt-8 sm:mt-10 md:mt-12">
+        <h3 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 md:mb-10 tracking-tight">Professional Timeline</h3>
         
         <ol className="relative border-s border-gray-300 dark:border-gray-700">
           {timelineData.map((item, index) => (
             <li
               key={item.id}
-              className={`ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200 ${
-                index < timelineData.length - 1 ? 'mb-10' : ''
+              className={`ms-4 sm:ms-6 cursor-pointer p-2 -m-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition duration-200 ${
+                index < timelineData.length - 1 ? 'mb-6 sm:mb-8 md:mb-10' : ''
               }`}
             >
               <div className="absolute w-4 h-4 bg-tech-accent rounded-full mt-1.5 -start-2.5 border-4 border-primary-bg dark:border-dark-bg"></div>

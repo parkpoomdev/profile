@@ -93,14 +93,14 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-4xl w-full mx-auto">
+    <div className="max-w-4xl w-full mx-auto px-0 sm:px-2">
       <Header
         activeSection={activeSection}
         onNavigate={handleNavigate}
         isNavLocked={isNavLocked}
       />
 
-      <main className="py-16">
+      <main className="py-8 sm:py-12 md:py-16">
         {activeSection === 'about' && <AboutSection />}
         {activeSection === 'work' && <WorkSection />}
         {activeSection === 'publications' && <PublicationsSection onPublicationClick={handlePublicationClick} />}

@@ -66,5 +66,29 @@
     pointer-events: none;
     cursor: default;
   }
+
+  /* Mobile-friendly touch targets */
+  @media (max-width: 640px) {
+    button, a {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+
+  /* Prevent text size adjustment on iOS */
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* Smooth scrolling for better mobile experience */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better tap highlight for mobile */
+  * {
+    -webkit-tap-highlight-color: rgba(0, 150, 255, 0.1);
+  }
 }
 
